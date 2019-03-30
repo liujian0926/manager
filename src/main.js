@@ -5,6 +5,10 @@ import App from './App.vue'
 Vue.config.productionTip = false
 // 导入router.js
 import router from './router.js'
+// 导入饿了么ui
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 
 
 new Vue({

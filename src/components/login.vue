@@ -6,9 +6,9 @@
 
 <script>
 export default {
-    
+    name:'login'
 }
 </script>
-<style lang="">
+<style lang="scss">
     
 </style>
