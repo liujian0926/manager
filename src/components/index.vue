@@ -1,40 +1,47 @@
 <template>
 
 <el-container class="index-container">
-    <!-- 头部 -->
-  <el-header class="my-header">
-    <el-row>
-      <el-col :span="4"><img src="../assets/logo.png" alt=""></el-col>
-      <el-col :span="18"><h2>后台管理系统</h2></el-col>
-      <el-col :span="2"><el-button type="success" plain>退出</el-button></el-col>
-   </el-row>
-  </el-header>
+  <!-- 头部 -->
+    <el-header class="my-header">
+      <el-row>
+        <el-col :span="4">
+          <img src="../assets/logo.png" alt>
+        </el-col>
+        <el-col :span="18">
+          <h2>后台管理系统</h2>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="success">退出</el-button>
+        </el-col>
+      </el-row>
+    </el-header>
 
-  <el-container class="my-container">
-      <!-- 左侧边栏 -->
-      <el-aside width="200px" class="my-aside">
-       
-      <el-menu
-        default-active="2"
-        class="el-menu-vertical-demo">
-          <el-submenu index="1">  
-              <template slot="title">
-                  <i class="el-icon-location"></i>
-                  <span>导航一</span>
-              </template>
-              <el-menu-item-group> 
-                  <el-menu-item index="1-2"><i class="el-icon-menu"></i>选项2</el-menu-item>
-              </el-menu-item-group>
-          </el-submenu>        
-      </el-menu>
+
+    <el-container class="my-container">
+      <!-- 侧边栏 -->
+      <el-aside class="my-aside" width="200px">
+        <!-- 使用饿了么ui的 导航菜单实现 -->
+        <el-menu router default-active="2" class="el-menu-vertical-demo">
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <el-menu-item index="users">
+              <span class="el-icon-menu"></span> 选项1
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
       </el-aside>
-    <el-container>
-               <!-- 右侧主体 -->
-          <el-main class="my-main">Main</el-main>
+      <!-- 主体区域 -->
+      <el-main class="my-main">
+        <!-- 出口 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
-  </el-container>
-</el-container>
 
+ 
+</el-container>
 </template>
 
 <script>
@@ -63,10 +70,11 @@ export default {
         .my-container{
             flex: 1;
             .my-aside{
-                background-color: red;
+                background-color: skyblue;
             }
             .my-main{
-                background-color: green;
+                background-color: #e9eef3;
+                 padding-top: 0;
             }
         }
     }
