@@ -43,13 +43,14 @@ export default {
     },
     // 方法
     methods: {
+        // 登陆验证
          submit(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // 成功
             
           } else {
-            //   失败
+            // 失败
             this.$message.error('数据格式错误')
             return false;
           }
