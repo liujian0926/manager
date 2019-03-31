@@ -47,15 +47,22 @@
 <script>
 export default {
     name:'index',
+    data() {
+      return {
+        
+      }
+    },
     methods: {
-      //登除
+      //登出
       loginout(){
         sessionStorage.removeItem('token')
         this.$router.push('/login')
       }
     },
+
+    // 判断登陆状态
     beforeCreate () {
-      // 判断有没有
+      // 判断有没有sessionStorage
       if(sessionStorage.getItem('token')){
 
       }else{
@@ -64,6 +71,9 @@ export default {
         this.$router.push('/login')
         
       }
+    },
+    created () {
+      
     }
 }
 </script>
