@@ -47,11 +47,6 @@
 <script>
 export default {
     name:'index',
-    data() {
-      return {
-        
-      }
-    },
     methods: {
       //登出
       loginout(){

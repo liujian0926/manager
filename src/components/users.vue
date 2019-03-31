@@ -47,7 +47,7 @@
             size="mini"
             plain
           ></el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" plain></el-button>
+          <el-button @click="deleteUser(scope.row)" type="danger" icon="el-icon-delete" size="mini" plain></el-button>
           <el-button type="success" icon="el-icon-check" size="mini" plain></el-button>
         </template>
       </el-table-column>
@@ -60,15 +60,15 @@
       :total="400"
     ></el-pagination>
 
-    <!-- 弹框 -->
+    <!-- 添加用用户弹框 -->
     <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
-      <el-form :model="addForm" :rules="addRules" >
-        <el-form-item label="用户名" label-width="100px">
-          <el-input v-model="addForm.username" autocomplete="off" prop="username"></el-input>
+      <el-form :model="addForm" :rules="addRules" ref="addForm">
+        <el-form-item label="用户名" label-width="100px" prop="username">
+          <el-input v-model="addForm.username" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" label-width="100px">
-          <el-input v-model="addForm.password" autocomplete="off" prop="password"></el-input>
+        <el-form-item label="密码" label-width="100px" prop="password">
+          <el-input v-model="addForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" label-width="100px">
           <el-input v-model="addForm.email" autocomplete="off"></el-input>
@@ -80,6 +80,25 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="onSubmit('addForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 编辑弹框 -->
+    <el-dialog title="编辑用户" :visible.sync="editFormVisible">
+      <el-form :model="editForm" :rules="addRules" ref="editForm">
+        <el-form-item label="用户名" label-width="100px" prop="username">
+          <el-input v-model="editForm.username" autocomplete="off" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" label-width="100px">
+          <el-input v-model="editForm.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" label-width="100px">
+          <el-input v-model="editForm.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -100,12 +119,19 @@ export default {
       usersList: [],
       // 数据
       total: 0,
-      // 弹框显示
+      // 添加用户弹框显示
       dialogFormVisible: false,
+      // 编辑弹框
+      editFormVisible: false,
       // 表单内容
       addForm: {
         username: "",
         password: "",
+        email: "",
+        mobile: ""
+      },
+      editForm: {
+        username: "",
         email: "",
         mobile: ""
       },
@@ -123,7 +149,31 @@ export default {
   },
 
   methods: {
-    handleEdit(index, row) {},
+    async handleEdit(index, row) {
+      // 获取编辑数据
+      let res = await this.$axios.get(`users/${row.id}`);
+      // console.log(res);
+      if (res.data.meta.status == 200) {
+        // 获取成功,把数据显示到表单里面
+        this.editForm = res.data.data;
+        // 显示弹框
+        this.editFormVisible = true;
+      }
+    },
+    // 编辑用户提交
+    async editSubmit() {
+      // 发送请求,提交数据
+      let res = await this.$axios.put(`users/${this.editForm.id}`, {
+        email: this.editForm.email,
+        mobile: this.editForm.mobile
+      });
+      // console.log(res);
+      if (res.data.meta.status == 200) {
+        // 刷新页面 关闭弹框
+        this.search();
+        this.editFormVisible = false;
+      }
+    },
 
     // 搜索用户功能
     async search() {
@@ -137,17 +187,53 @@ export default {
 
     // 添加用户
     onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           // 成功发送请求添加到数据库
-          alert("submit!");
+          let res = await this.$axios.post("users", this.addForm);
+          // console.log(res);
+          if (res.data.meta.status == 201) {
+            // 添加成功 刷新页面
+            this.search();
+            // 关闭弹框
+            this.dialogFormVisible = false;
+          } else {
+            this.$message.error("请输入内容");
+            return false;
+          }
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return false;
         }
       });
     },
 
+
+      // 删除用户
+     deleteUser(row) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          let res =await this.$axios.delete(`users/${row.id}`)
+          // console.log(res);
+          if(res.data.meta.status==200){
+            // 删除成功,刷新页面
+            this.search();
+          //   this.$message({
+          //   type: 'success',
+          //   message: '删除成功!'
+          // });
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+    
     // 用户状态改变事件
     statusChange(row) {
       //发送请求,改变状态

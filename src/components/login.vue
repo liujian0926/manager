@@ -28,7 +28,7 @@ export default {
                 username:'',
                 password:''
             },
-            // 扁担验证规则
+            // 表单验证规则
             rules:{
                 username:[
                     {required:true,message:'请输入用户名',trigger:'blur'},
@@ -49,7 +49,7 @@ export default {
           if (valid) {
             // 成功 发送请求获取数据
             let res = await this.$axios.post('login',this.loginForm)
-            console.log(res);
+            // console.log(res);
             if(res.data.meta.status==400){
                 // 失败
                 this.$message.error(res.data.meta.msg)
