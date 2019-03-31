@@ -54,6 +54,17 @@ export default {
         this.$router.push('/login')
       }
     },
+    beforeCreate () {
+      // 判断有没有
+      if(sessionStorage.getItem('token')){
+
+      }else{
+        this.$message.error('请登录');
+        // 返回登陆页
+        this.$router.push('/login')
+        
+      }
+    }
 }
 </script>
 <style lang="scss">
