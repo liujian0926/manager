@@ -57,7 +57,7 @@ export default {
                 // 成功
                 this.$message.success(res.data.meta.msg)
                 sessionStorage.setItem('token',res.data.data.token)
-                // 跳转到首页
+                // 跳转到首页 编程式导航
                 this.$router.push('/')
             }
             
