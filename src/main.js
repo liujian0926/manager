@@ -14,26 +14,31 @@ Vue.use(ElementUI);
 
 // 请求拦截器
 axios.interceptors.request.use(function (config) {
-
+  // 请求之前同意设置token
   config.headers.Authorization = window.sessionStorage.getItem("token")
+
   return config;
-  //  headers: {
-  //    Authorization: window.sessionStorage.getItem("token")
-  //  },
   
 }, function (error) {
-  // Do something with request error
+ 
   return Promise.reject(error);
 });
 
 
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
-  Vue.prototype.$message.success(response.data.meta.msg)
-  // Do something with response data
+  // 同意设置状态码
+  if([200,201,204].indexOf(response.data.meta.status!=-1)){
+    Vue.prototype.$message.success(response.data.meta.msg)
+  }else{
+    Vue.prototype.$message.warning(response.data.meta.msg)
+  }
+
+  
+  
   return response;
 }, function (error) {
-  // Do something with response error
+  
   return Promise.reject(error);
 });
 // 导入axios

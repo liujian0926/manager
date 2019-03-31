@@ -29,7 +29,7 @@
       <el-table-column prop="mobile" label="电话"></el-table-column>
       <el-table-column prop="mg_state" label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch @change="statusChange(scope.row)" v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
 
@@ -87,6 +87,12 @@ export default {
     this.usersList = res.data.data.users;
     this.total = res.data.total;
   },
+
+  // 用胡状态改变事件
+  statusChange(row){
+    //发送请求,改变状态
+    this.$axios.put(`users/${row.id}/state/${row.mg_state}`)
+  }
   },
 
   
