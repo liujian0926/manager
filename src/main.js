@@ -11,10 +11,15 @@ import router from './router.js'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
-
+// 导入axios
+import axios from 'axios'
+// 创建axios基地址
+axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
+// 创建全局axios
+Vue.prototype.$axios = axios
 
 new Vue({
-  el:'#app',
+  el: '#app',
   render: h => h(App),
   router: router
 })

@@ -32,7 +32,7 @@ export default {
             rules:{
                 username:[
                     {required:true,message:'请输入用户名',trigger:'blur'},
-                    {min:6,message:'长度在6-20个字符',trigger:'blur'}
+                    {min:4,message:'长度在4-20个字符',trigger:'blur'}
                     ],
                 password:[
                     {required:true,message:'请输入用密码',trigger:'blur'},
@@ -45,9 +45,21 @@ export default {
     methods: {
         // 登陆验证
          submit(formName) {
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate( async (valid) => {
           if (valid) {
-            // 成功
+            // 成功 发送请求获取数据
+            let res = await this.$axios.post('login',this.loginForm)
+            console.log(res);
+            if(res.data.meta.status==400){
+                // 失败
+                this.$message.error(res.data.meta.msg)
+            }else if(res.data.meta.status == 200){
+                // 成功
+                this.$message.success(res.data.meta.msg)
+                sessionStorage.setItem('token',res.data.data.token)
+                // 跳转到首页
+                this.$router.push('/')
+            }
             
           } else {
             // 失败
