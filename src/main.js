@@ -11,6 +11,9 @@ import router from './router.js'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+// 全局面包屑
+import mybreak from './components/mybreak.vue'
+Vue.component('my-break',mybreak)
 
 // 请求拦截器
 axios.interceptors.request.use(function (config) {

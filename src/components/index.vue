@@ -100,13 +100,7 @@ export default {
         }
         .my-container{
             flex: 1;
-            .my-aside{
-                background-color: skyblue;
-            }
-            .my-main{
-                background-color: #e9eef3;
-                 padding-top: 0;
-            }
+            
         }
     }
 </style>
