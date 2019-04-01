@@ -47,8 +47,14 @@
             size="mini"
             plain
           ></el-button>
-          <el-button @click="deleteUser(scope.row)" type="danger" icon="el-icon-delete" size="mini" plain></el-button>
-          <el-button type="success" icon="el-icon-check" size="mini" plain></el-button>
+          <el-button
+            @click="deleteUser(scope.row)"
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            plain
+          ></el-button>
+          <el-button @click="role(scope.row)" type="success" icon="el-icon-check" size="mini" plain></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -101,6 +107,29 @@
         <el-button type="primary" @click="editSubmit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 角色弹框 -->
+    <el-dialog title="角色切换" :visible.sync="roleFormVisible">
+      <el-form ref="roleForm">
+        <el-form-item label="当前用户" label-width="100px" prop="username">{{roleUser.username}}</el-form-item>
+        <el-form-item label="选择角色" label-width="100px">
+          <el-select v-model="roleUser.role_name" placeholder="请选择">
+
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="roleFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="roleSubmit('roleForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -123,6 +152,12 @@ export default {
       dialogFormVisible: false,
       // 编辑弹框
       editFormVisible: false,
+      // 角色切换显示
+      roleFormVisible: false,
+      // 角色列表
+      rolesList: [],
+      // 当前角色名
+      roleUser: "",
       // 表单内容
       addForm: {
         username: "",
@@ -208,36 +243,64 @@ export default {
       });
     },
 
-
-      // 删除用户
-     deleteUser(row) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(async () => {
-          let res =await this.$axios.delete(`users/${row.id}`)
+    // 删除用户
+    deleteUser(row) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let res = await this.$axios.delete(`users/${row.id}`);
           // console.log(res);
-          if(res.data.meta.status==200){
+          if (res.data.meta.status == 200) {
             // 删除成功,刷新页面
             this.search();
-          //   this.$message({
-          //   type: 'success',
-          //   message: '删除成功!'
-          // });
+            //   this.$message({
+            //   type: 'success',
+            //   message: '删除成功!'
+            // });
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      },
-    
+    },
+
     // 用户状态改变事件
     statusChange(row) {
       //发送请求,改变状态
       this.$axios.put(`users/${row.id}/state/${row.mg_state}`);
+    },
+    async role(row) {
+      // 显示弹框
+      this.roleFormVisible = true;
+      // 获取数据,当前点击的角色
+      let res = await this.$axios.get("roles");
+      // console.log(row);
+      
+      // console.log(res);
+      // 当前点击的用户
+      this.roleUser = row;
+      // 角色列表
+      this.rolesList = res.data.data;
+    },
+
+    // 分配角色
+   async roleSubmit(formName){
+      let res = await this.$axios.put(`users/${this.roleUser.id}/role`,{
+        rid:this.roleUser.role_name
+      })
+      console.log(res);
+      if(res.data.meta.status==200){
+        // 关闭弹框, 刷新页面
+        this.roleFormVisible = false;
+        this.search();
+      }
+      
     }
   },
 
