@@ -27,7 +27,7 @@
               <i class="el-icon-location"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="users" v-for="it in item.children">
+            <el-menu-item :index="it.path" v-for="it in item.children">
               <span class="el-icon-menu"></span> {{it.authName}}
             </el-menu-item>
           </el-submenu>
@@ -74,7 +74,7 @@ export default {
     },
    async created () {
      let res =await this.$axios.get('menus')
-     console.log(res);
+    //  console.log(res);
      this.menusList = res.data.data
      
     }
