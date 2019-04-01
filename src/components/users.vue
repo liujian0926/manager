@@ -60,10 +60,12 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-      :page-sizes="[100, 200, 300, 400]"
+      :page-sizes="[3,6,9,12]"
       :page-size="100"
       layout="total, sizes, prev, pager, next, jumper"
       :total="400"
+      @size-change="pagenum"
+      @current-change='currentpage'
     ></el-pagination>
 
     <!-- 添加用用户弹框 -->
@@ -301,6 +303,16 @@ export default {
         this.search();
       }
       
+    },
+    // 页码改变
+    currentpage(current){
+      this.sendData.pagenum = current
+      this.search()
+    },
+    // 页容量改变
+    pagenum(num){
+      this.sendData.pagesize = num
+      this.search()
     }
   },
 

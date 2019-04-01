@@ -21,14 +21,14 @@
       <!-- 侧边栏 -->
       <el-aside class="my-aside" width="200px">
         <!-- 使用饿了么ui的 导航菜单实现 -->
-        <el-menu router default-active="2" class="el-menu-vertical-demo">
-          <el-submenu index="1">
+        <el-menu router default-active="users" class="el-menu-vertical-demo">
+          <el-submenu :index="item.id+''" v-for='item in menusList' >
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="users">
-              <span class="el-icon-menu"></span> 选项1
+            <el-menu-item index="users" v-for="it in item.children">
+              <span class="el-icon-menu"></span> {{it.authName}}
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -47,6 +47,11 @@
 <script>
 export default {
     name:'index',
+    data () {
+      return {
+        menusList:[]
+      }
+    },
     methods: {
       //登出
       loginout(){
@@ -67,8 +72,11 @@ export default {
         
       }
     },
-    created () {
-      
+   async created () {
+     let res =await this.$axios.get('menus')
+     console.log(res);
+     this.menusList = res.data.data
+     
     }
 }
 </script>
