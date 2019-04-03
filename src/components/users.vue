@@ -213,7 +213,7 @@ export default {
       let res = await this.$axios.get("users", {
         params: this.sendData
       });
-      // console.log(res);
+      console.log(res);
       this.usersList = res.data.data.users;
       this.total = res.data.total;
     },

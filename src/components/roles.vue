@@ -8,41 +8,43 @@
     <el-row>
       <!-- 按钮 -->
       <el-col :span="6">
-        <el-button type="success" plain class="btn-add" @click="dialogFormVisible=true">添加角色</el-button>
+        <el-button type="success" plain class="btn-add">添加角色</el-button>
       </el-col>
     </el-row>
 
     <!-- 表格 -->
-    <el-table :data="rolesList" style="width: 100%" border>
-      <el-table-column type="index"></el-table-column>
-      <el-table-column prop="username" label="角色名称" width="180"></el-table-column>
-      <el-table-column prop="email" label="劫色描述" width="180"></el-table-column>
-     
-      </el-table-column>
+    <el-table :data="roleList" style="width: 100%" border >
+      <el-table-column type="index" width="50"></el-table-column>
+      <el-table-column prop="roleName" label="角色名称" width="180" ></el-table-column>
+      <el-table-column prop="roleDesc" label="角色描述" width="180" ></el-table-column>
 
-      <el-table-column prop="address" label="操作">
+      <el-table-column label="操作">
+        <!-- scope 是一个名字 -->
         <template slot-scope="scope">
+          <!-- 我们可以通过scope.$index 获取索引 scope.row获取这一行的数据 -->
           <el-button
             type="primary"
-            icon="el-icon-edit"
-            @click="handleEdit(scope.$index,scope.row)"
             size="mini"
+            icon="el-icon-edit"
             plain
           ></el-button>
           <el-button
-            @click="deleteUser(scope.row)"
             type="danger"
-            icon="el-icon-delete"
             size="mini"
+            icon="el-icon-delete"
             plain
           ></el-button>
-          <el-button @click="role(scope.row)" type="success" icon="el-icon-check" size="mini" plain></el-button>
+          <el-button
+            type="warning"
+            size="mini"
+            icon="el-icon-check"
+            plain
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
   
-
+ 
     
 
     
@@ -50,13 +52,39 @@
 </template>
 
 <script>
+
 export default {
   name: "roles",
  data() {
    return {
-     rolesList:[{},{}]
+    //  角色列表
+     roleList:[
+       {name:'张安',age:19}
+     ]
    }
  },
+
+ methods: {
+   getRoles(){
+    this.$axios.get('roles').then(res=>{
+      console.log(res);
+      if(res.data.meta.status==200){
+        this.roleList = res.data.data
+         console.log(this.roleList);
+      }
+    })
+      
+   
+    
+   }
+   
+   
+},
+//  created() {
+//    this.getRoles()
+//  },
+
+// // 获取数据渲染页面
 
  
 };
