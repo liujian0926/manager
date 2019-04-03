@@ -27,7 +27,8 @@ import reports from './components/reports.vue'
 // 定义路由规则
 const routes = [{
         path: '/login',
-        component: login
+        component: login,
+        meta: { noLogin:true }
     },
     {
         path: '/',
@@ -49,5 +50,24 @@ const routes = [{
 const router = new VueRouter({
     routes: routes
 })
+
+// 注册导航守卫
+ router.beforeEach((to, from, next) => {
+    if(to.meta.noLogin==true){
+        // 直接登陆
+        next()
+    }else{
+        if(sessionStorage.getItem('token')){
+            next()
+        }else{
+            Vue.prototype.$message.error('哥们请登录')
+            // 跳转到登陆页
+            next('/login')
+            
+        }
+    }
+     
+ })
+
 // 暴露router
 export default router

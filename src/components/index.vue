@@ -61,17 +61,17 @@ export default {
     },
 
     // 判断登陆状态
-    beforeCreate () {
-      // 判断有没有sessionStorage
-      if(sessionStorage.getItem('token')){
+    // beforeCreate () {
+    //   // 判断有没有sessionStorage
+    //   if(sessionStorage.getItem('token')){
 
-      }else{
-        this.$message.error('请登录');
-        // 返回登陆页
-        this.$router.push('/login')
+    //   }else{
+    //     this.$message.error('请登录');
+    //     // 返回登陆页
+    //     this.$router.push('/login')
         
-      }
-    },
+    //   }
+    // },
    async created () {
      let res =await this.$axios.get('menus')
     //  console.log(res);
