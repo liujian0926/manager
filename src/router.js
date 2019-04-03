@@ -58,6 +58,12 @@ const router = new VueRouter({
 
 // 注册导航守卫
  router.beforeEach((to, from, next) => {
+    // 输入地址不存在
+    if(to.matched.length ==0){
+        // 跳转到登陆页
+        next('/error')
+    }
+
     if(to.meta.noLogin==true){
         // 直接登陆
         next()

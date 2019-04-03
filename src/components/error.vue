@@ -6,14 +6,19 @@
 <script>
 export default {
     
+    created() {
+        setTimeout(() => {
+        this.$router.push('/login')
+    }, 3000);
+    },
 }
 </script>
 <style lang="scss">
   .error {
-      overflow: hidden;
      img {
       display: block;
       width: 100%;
+      overflow: hidden;
      }
   }
 </style>
