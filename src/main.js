@@ -31,6 +31,15 @@ axios.interceptors.request.use(function (config) {
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
   // 同意设置状态码
+  if(response.data.meta.msg=='无效token' && response.data.meta.status == 400){
+    // 提视
+    Vue.prototype.$message.error('非法token,请登陆')
+    // 清除非法token
+    sessionStorage.removeItem('token')
+    // 返回登陆
+    // router.push('/login')
+    Vue.prototype.$router.push('/login')
+  }
   if([200,201,204].indexOf(response.data.meta.status!=-1)){
     Vue.prototype.$message.success(response.data.meta.msg)
   }else{

@@ -24,8 +24,13 @@ import orders from './components/orders.vue'
 import params from './components/params.vue'
 // 导入数据报表组件
 import reports from './components/reports.vue'
+// 导入404页组件
+import error from './components/error.vue'
 // 定义路由规则
-const routes = [{
+const routes = [
+
+     {path:'/error',component:error},
+    {
         path: '/login',
         component: login,
         meta: { noLogin:true }
